@@ -2,11 +2,11 @@ import os
 import logging 
 from datetime import datetime
 
-log_bas_dir = "logs"
+log_base_dir = "logs"
 timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S") 
-log_dir = os.path.join(log_bas_dir, timestamp) 
+log_dir = os.path.join(log_base_dir, timestamp) 
 
-os.makedirs(log_bas_dir, exist_ok = True) 
+os.makedirs(log_dir, exist_ok = True) 
 
 def get_logger(file_name):
     """

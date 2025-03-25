@@ -3,21 +3,23 @@ import json
 from app.logger import get_logger
 from flask import Flask, request, render_template
 
-with open("app/congig.json", "rb") as file:
-    params = json.load(file) 
-
 # Add logger file to add logs 
 logger = get_logger("server")
 
+# Load the parameters 
+with open("app/config.json", "rb") as file:
+    params = json.load(file) 
+logger.info("loaded the parameters from 'config.json' file")
+
 # Use Flask for API
-app = Flask(__name__) 
+app = Flask(__name__, template_folder = "../templates") 
 
 # Add a uploads folder to store all the uploaded files
-os.makedirs("uploads/", exist_ok = True)
+os.makedirs("uploads", exist_ok = True)
 
 @app.route("/")
 def upload_form():
-    return render_template("templates/index.html") 
+    return render_template("index.html") 
 
 @app.route("/", methods = ["POST"])
 def upload_file():

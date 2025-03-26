@@ -1,41 +1,46 @@
 import requests 
 import sys 
 import os 
+from flask import Flask, request, render_template, flash
 from tqdm import tqdm 
 from app.logger import get_logger
 
 logger = get_logger("client") 
 
-SERVER_IP = ""
+SERVER_IP = "192.168.131.45"
 PORT = 5001 
 UPLOAD_URL = f"http://{SERVER_IP}:{PORT}" 
 
+# Initialize Flask app
+app = Flask(__name__, template_folder = "../templates") 
+app.secret_key = "Raju@2003" 
+
+@app.route("/")
+def upload_form():
+    """Render file upload form."""
+    return render_template("index.html")
+
+@app.route("/", methods=["POST"])
 def uploade_file(file_path):
-    """Uploads a file to the flask server"""
-    if not os.path.exists(file_path):
-        logger.error(f"File not found on path {file_path}") 
-        return
-    file_size = os.path.getsize(file_path)
-    file_name = os.path.basename(file_path)
+    """Handles file upload to the server."""
+    try:
+        file = request.files.get("file")
+        if not file:
+            flash("No file selected!", "error")
+            return render_template("index.html")
 
-    with open(file_path, "rb") as file:
-        with tqdm(total = file_size, unit = "B", unit_scale = True, desc = f"Uploading {file_name}") as progress:
-            response = requests.post(
-                UPLOAD_URL, 
-                file = {
-                    "file": file
-                },
-                stream = True
-            )
-            progress.update(file_size) 
+        files = {"file": (file.filename, file.stream)}
+        response = requests.post(UPLOAD_URL, files=files)
 
-    if response.status_code == 200:
-        logger.info(f"File {file_name} Uploaded Successfully!")
-    else:
-        logger.error(f"Failed uploading {file_name}. Server Response {response.text}") 
+        if response.status_code == 200:
+            flash(f"File '{file.filename}' uploaded successfully!", "success")
+        else:
+            flash(f"Failed to upload '{file.filename}'. Server response: {response.text}", "error")
+
+    except requests.exceptions.RequestException as e:
+        flash(f"Connection error: {e}", "error")
+
+    return render_template("index.html")
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: python client.py <file_path>")
-    else:
-        uploade_file(sys.argv[1]) 
+    app.run(host="0.0.0.0", port=5002, debug=True)

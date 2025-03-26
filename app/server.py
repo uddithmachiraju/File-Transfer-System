@@ -19,7 +19,7 @@ os.makedirs("uploads", exist_ok = True)
 
 @app.route("/")
 def upload_form():
-    return render_template("index.html") 
+    return render_template("intro.html") 
 
 @app.route("/", methods = ["POST"])
 def upload_file():

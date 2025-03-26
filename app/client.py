@@ -1,8 +1,5 @@
 import requests 
-import sys 
-import os 
 from flask import Flask, request, render_template, flash
-from tqdm import tqdm 
 from app.logger import get_logger
 
 logger = get_logger("client") 

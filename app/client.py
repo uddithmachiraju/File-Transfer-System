@@ -1,16 +1,23 @@
-import requests 
+import requests
+import argparse
 from flask import Flask, request, render_template, flash
 from app.logger import get_logger
 
-logger = get_logger("client") 
+logger = get_logger("client")
 
-SERVER_IP = "192.168.131.45"
-PORT = 5001 
-UPLOAD_URL = f"http://{SERVER_IP}:{PORT}" 
+# Argument Parser for IP and Port
+parser = argparse.ArgumentParser(description="Flask File Upload Client")
+parser.add_argument("--server_ip", required=True, help="Server IP address (Required)")
+parser.add_argument("--server_port", type=int, default=5001, help="Server Port (default: 5001)")
 
-# Initialize Flask app
-app = Flask(__name__, template_folder = "../templates") 
-app.secret_key = "Raju@2003" 
+args = parser.parse_args()
+SERVER_IP = args.server_ip
+PORT = args.server_port 
+UPLOAD_URL = f"http://{SERVER_IP}:{PORT}"
+
+# Initialize Flask App
+app = Flask(__name__, template_folder="../templates")
+app.secret_key = "Raju@2003"
 
 @app.route("/")
 def upload_form():
@@ -18,7 +25,7 @@ def upload_form():
     return render_template("index.html")
 
 @app.route("/", methods=["POST"])
-def uploade_file(file_path):
+def upload_file():
     """Handles file upload to the server."""
     try:
         file = request.files.get("file")
@@ -40,4 +47,5 @@ def uploade_file(file_path):
     return render_template("index.html")
 
 if __name__ == "__main__":
+    logger.info(f"Client sending requests to {UPLOAD_URL}")
     app.run(host="0.0.0.0", port=5002, debug=True)

@@ -9,28 +9,59 @@
             font-family: Arial, sans-serif;
             text-align: center;
             margin: 50px;
+            background-color: #f8f9fa;
         }
         h1 {
             color: #333;
         }
         p {
             font-size: 18px;
-            color: #666;
+            color: #555;
+        }
+        code {
+            background-color: #eee;
+            padding: 5px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        form {
+            margin-top: 20px;
+            padding: 20px;
+            background: #fff;
+            display: inline-block;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        input[type="file"] {
+            margin: 10px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #218838;
         }
     </style>
 </head>
 <body>
     <h1>Welcome to the File Upload API</h1>
     <p>This API allows clients to upload files to the server.</p>
-    <p>Use this route as a endpoint to send a file via a POST request.</p>
 
     <h2>How to Use</h2>
-    <p>1️⃣ Make sure that <strong>server.py</strong> is running on <strong>Computer A</strong>.</p>
-    <p>2️⃣ Make sure that <strong>client.py</strong> is running on <strong>Computer B</strong>.</p>
-    <p>3️⃣ To upload a file from Computer B to Computer A, run the following command on Computer B:</p>
+    <p>1️⃣ Start the <strong>server</strong> on <strong>Computer A</strong>:</p>
+    <code>python server.py --host 192.168.X.X --port 5001</code>
 
-    <code>python -m app.client &lt;file_path&gt;</code>
+    <p>2️⃣ Run the <strong>client</strong> on <strong>Computer B</strong>:</p>
+    <code>python client.py --server_ip 192.168.X.X --server_port 5001</code>
 
-    <p>Also, ensure that both computers have the <strong>same IP address configuration</strong> to make the upload successful.</p>
+    <p>3️⃣ Select a file and click <strong>Upload</strong> to send it to the server.</p>
+
+    <p>Ensure that both computers are connected to the <strong>same network</strong> to avoid connection issues.</p>
 </body>
 </html>
